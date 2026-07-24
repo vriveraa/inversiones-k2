@@ -55,6 +55,8 @@ Deno.serve(async (req) => {
     return json({ ocupados: [...ocupados], calendarioOk })
   } catch (err) {
     console.error('[K2] disponibilidad:', err)
-    return json({ error: 'Error al consultar disponibilidad' }, 500)
+    // `detalle` ayuda a diagnosticar la puesta en marcha sin revisar los logs.
+    // No expone secretos: son mensajes de error, no valores.
+    return json({ error: 'Error al consultar disponibilidad', detalle: String(err).slice(0, 300) }, 500)
   }
 })

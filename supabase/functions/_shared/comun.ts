@@ -16,15 +16,33 @@ export const json = (body: unknown, status = 200) =>
   })
 
 /**
- * Cliente con service role: salta RLS. Solo se usa dentro de las Edge
+ * Llave privilegiada del proyecto. Supabase la expone con distintos nombres
+ * según la antigüedad del proyecto: los nuevos usan `SUPABASE_SECRET_KEY`
+ * (sistema sb_secret_...) y los antiguos `SUPABASE_SERVICE_ROLE_KEY`.
+ * Se prueban ambos para que funcione en cualquier caso.
+ */
+function llavePrivilegiada() {
+  const key =
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ??
+    Deno.env.get('SUPABASE_SECRET_KEY')
+
+  if (!key) {
+    throw new Error(
+      'Falta la llave privilegiada. Define SUPABASE_SERVICE_ROLE_KEY o ' +
+        'SUPABASE_SECRET_KEY en los secretos de Edge Functions.',
+    )
+  }
+  return key
+}
+
+/**
+ * Cliente con permisos elevados: salta RLS. Solo se usa dentro de las Edge
  * Functions, nunca en el navegador.
  */
 export const db = () =>
-  createClient(
-    Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
-    { auth: { persistSession: false } },
-  )
+  createClient(Deno.env.get('SUPABASE_URL')!, llavePrivilegiada(), {
+    auth: { persistSession: false },
+  })
 
 /** Bloques horarios que ofrece la web: 09:00–17:30 cada 30 min. */
 export const SLOTS = Array.from({ length: 18 }, (_, i) => {
