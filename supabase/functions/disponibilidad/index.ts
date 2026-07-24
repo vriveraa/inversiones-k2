@@ -55,18 +55,6 @@ Deno.serve(async (req) => {
     return json({ ocupados: [...ocupados], calendarioOk })
   } catch (err) {
     console.error('[K2] disponibilidad:', err)
-
-    // Diagnóstico de puesta en marcha. Solo mensajes de error y NOMBRES de
-    // variables — nunca sus valores, así no se filtra ningún secreto.
-    const detalle =
-      err instanceof Error ? err.message : JSON.stringify(err)?.slice(0, 400)
-    const secretosPresentes = Object.keys(Deno.env.toObject())
-      .filter((k) => /^(SUPABASE|RESEND|SITIO|ASESOR|FROM|MS)_/.test(k))
-      .sort()
-
-    return json(
-      { error: 'Error al consultar disponibilidad', detalle, secretosPresentes },
-      500,
-    )
+    return json({ error: 'Error al consultar disponibilidad' }, 500)
   }
 })

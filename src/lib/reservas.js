@@ -17,7 +17,7 @@ import { toISODate } from '../utils/format.js'
  * │              migración SQL aplicada. Ver BACKEND.md.                      │
  * └─────────────────────────────────────────────────────────────────────────┘
  */
-const MODO = 'directo'
+const MODO = 'edge'
 
 const URL_BASE = import.meta.env.VITE_SUPABASE_URL
 const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
