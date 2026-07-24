@@ -1,0 +1,18 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env
+.env.*
+!.env.example
+
+# Credenciales y notas privadas — nunca subir al repositorio
+CREDENCIALES.md
+Supabase contraseña*.txt
+
+# Material original de trabajo (ya procesado dentro de public/; no se despliega)
+material visual de remate ganador/
+Foto papá profesional.png
+Gemini_Generated_Image_*.png
+Logo inversiones K2 Horizontalll.png
+favicon k2.png

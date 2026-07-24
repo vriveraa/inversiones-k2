@@ -1,0 +1,146 @@
+/**
+ * Artículos de ejemplo para el blog "Tu Asesor".
+ * TODO: reemplazar con contenido real / CMS.
+ */
+export const POSTS = [
+  {
+    slug: 'como-funcionan-los-remates-judiciales',
+    image: '/img/blog-remates-judiciales.jpg',
+    title: 'Cómo funcionan los remates judiciales en Chile: guía completa para invertir',
+    category: 'Fundamentos',
+    date: '12 de junio, 2026',
+    readTime: '8 min',
+    gradient: 'from-jade to-navy',
+    excerpt:
+      'Todo lo que necesitas saber antes de participar en un remate: etapas del proceso, quiénes intervienen, cómo se fija el mínimo y qué garantías exige el tribunal.',
+    content: [
+      { type: 'p', text: 'Un remate judicial es la venta forzada de una propiedad ordenada por un tribunal, generalmente producto de una deuda hipotecaria impaga. Para el inversionista informado, representa una de las pocas oportunidades reales de comprar propiedades por debajo de su valor de mercado, con la seguridad de un proceso conducido por la justicia.' },
+      { type: 'h2', text: 'Las etapas del proceso' },
+      { type: 'p', text: 'El proceso comienza con la publicación del aviso de remate, donde se informa la propiedad, el mínimo de la subasta y la fecha. Antes de participar, se debe rendir una garantía (habitualmente el 10% del mínimo) mediante vale vista a la orden del tribunal. El día del remate, los postores compiten en la subasta y el mejor postor se adjudica la propiedad.' },
+      { type: 'p', text: 'Tras la adjudicación viene la etapa más técnica: la suscripción del acta de remate, el pago del saldo de precio, la firma de la escritura de adjudicación y finalmente la inscripción en el Conservador de Bienes Raíces. Cada uno de estos pasos tiene plazos y formalidades que conviene manejar con asesoría experta.' },
+      { type: 'h2', text: '¿Por qué los precios son más bajos?' },
+      { type: 'p', text: 'Los mínimos de subasta se fijan generalmente a partir de la tasación fiscal o de tasaciones ordenadas por el tribunal, que suelen estar por debajo del valor comercial. A eso se suma que participan menos compradores que en el mercado tradicional, porque el proceso exige conocimiento técnico y capital disponible. Menos competencia significa mejores precios para quien sí está preparado.' },
+      { type: 'p', text: 'En Inversiones K2 estudiamos cada propiedad antes del remate: títulos, deudas, gravámenes y estado de ocupación. Así nuestros clientes llegan a la subasta con información completa y un precio máximo definido con criterio de rentabilidad.' },
+    ],
+  },
+  {
+    slug: 'errores-comunes-al-invertir-en-remates',
+    image: '/img/blog-errores.jpg',
+    title: '5 errores que debes evitar al invertir en tu primer remate',
+    category: 'Estrategia',
+    date: '28 de mayo, 2026',
+    readTime: '6 min',
+    gradient: 'from-forest to-jade-deep',
+    excerpt:
+      'Desde no estudiar los títulos hasta subestimar los costos posteriores a la adjudicación: los errores más frecuentes de quienes llegan solos a una subasta.',
+    content: [
+      { type: 'p', text: 'La mayoría de las malas experiencias en remates no se deben al mecanismo en sí, sino a la falta de preparación. Estos son los cinco errores que más vemos en inversionistas que llegan solos a su primera subasta.' },
+      { type: 'h2', text: '1. No estudiar los títulos de la propiedad' },
+      { type: 'p', text: 'El error más grave. Una propiedad puede arrastrar embargos, hipotecas de segundo grado, litigios o problemas de inscripción. El estudio de títulos previo es lo que separa una gran inversión de un problema judicial de años.' },
+      { type: 'h2', text: '2. No definir un precio máximo antes de la subasta' },
+      { type: 'p', text: 'La dinámica de una subasta empuja a competir. Sin un tope calculado con datos —valor comercial real, costos de regularización, potencial de arriendo o reventa— es fácil terminar pagando un precio que destruye la rentabilidad de la operación.' },
+      { type: 'h2', text: '3. Subestimar los costos posteriores' },
+      { type: 'p', text: 'Al precio de adjudicación hay que sumar impuestos, derechos de inscripción, eventuales deudas de contribuciones o gastos comunes, y el costo del proceso de entrega de la propiedad. Un buen análisis los incorpora todos antes de decidir participar.' },
+      { type: 'p', text: 'Los otros dos errores —ignorar el estado de ocupación y participar sin la garantía correctamente constituida— tienen el mismo origen: improvisación. La buena noticia es que todos son evitables con acompañamiento profesional.' },
+    ],
+  },
+  {
+    slug: 'como-evaluar-una-propiedad-en-remate',
+    image: '/img/blog-evaluar.jpg',
+    title: 'Cómo evaluar una propiedad en remate: el método K2',
+    category: 'Análisis',
+    date: '15 de mayo, 2026',
+    readTime: '7 min',
+    gradient: 'from-navy-soft to-jade',
+    excerpt:
+      'Nuestro proceso de due diligence en cuatro capas: legal, comercial, física y financiera. El mismo checklist que aplicamos antes de recomendar cualquier subasta.',
+    content: [
+      { type: 'p', text: 'No todas las propiedades que llegan a remate son buenas oportunidades. Nuestro trabajo es filtrar: de cada diez subastas que analizamos, recomendamos participar en dos o tres. Este es el método que aplicamos.' },
+      { type: 'h2', text: 'Capa 1: análisis legal' },
+      { type: 'p', text: 'Estudio de títulos de los últimos 10 años, verificación de gravámenes, embargos e hipotecas, revisión del expediente judicial y de las bases del remate. Si algo no cuadra aquí, la propiedad se descarta sin excepción.' },
+      { type: 'h2', text: 'Capa 2: análisis comercial' },
+      { type: 'p', text: 'Tasación comercial independiente, estudio de mercado del sector, plusvalía histórica de la comuna y liquidez esperada. El descuento del remate solo tiene sentido si la propiedad es vendible o arrendable en un plazo razonable.' },
+      { type: 'h2', text: 'Capa 3 y 4: física y financiera' },
+      { type: 'p', text: 'Evaluamos el estado de conservación y ocupación de la propiedad, y construimos el modelo financiero completo: precio máximo de postura, costos totales de la operación, escenarios de rentabilidad por arriendo y por reventa. Solo si las cuatro capas dan luz verde, recomendamos participar.' },
+    ],
+  },
+  {
+    slug: 'caso-exito-departamento-santiago-centro',
+    title: 'Caso real: un departamento en Santiago Centro comprado en $64M y vendido en $95M',
+    category: 'Casos de éxito',
+    date: '18 de julio, 2026',
+    readTime: '5 min',
+    gradient: 'from-jade-deep to-navy',
+    image: '/img/caso-cocina.jpg',
+    excerpt:
+      'Un departamento en Santiago Centro adjudicado en remate por $64 millones, con $5,5 millones en trámites y remodelación, y vendido en $95 millones. Una utilidad real de $25,5 millones, paso a paso y con fotos de la operación.',
+    content: [
+      { type: 'p', text: 'Este no es un ejemplo hipotético: es una operación real que ejecutamos de principio a fin, en un departamento en Santiago Centro. Sirve para mostrar, con números y fotos, cómo se genera valor comprando en remate y poniendo la propiedad en su mejor versión antes de venderla.' },
+      { type: 'h2', text: 'La adjudicación' },
+      { type: 'p', text: 'Identificamos un departamento en Santiago Centro con potencial claro y un precio de entrada muy por debajo de su valor de venta: una comuna con altísima demanda, conectividad inmejorable y liquidez rápida a la hora de vender. Tras el estudio de títulos y el análisis de mercado, definimos un precio máximo de postura y lo respetamos con disciplina. La propiedad se adjudicó en el remate por $64.000.000.' },
+      { type: 'p', text: 'La condición era la esperada en este tipo de compras: la propiedad estaba en obra gruesa en varios ambientes, con pisos de cemento a la vista y sin terminaciones. Ahí es donde estaba la oportunidad.' },
+      {
+        type: 'imgpair',
+        items: [
+          { src: '/img/caso-obra.jpg', caption: 'El punto de partida: living en obra gruesa, piso de cemento.' },
+          { src: '/img/caso-piso.jpg', caption: 'Durante: instalación de piso flotante en todos los ambientes.' },
+        ],
+      },
+      { type: 'h2', text: 'La transformación' },
+      { type: 'p', text: 'Con un presupuesto acotado y controlado, ejecutamos una remodelación enfocada en lo que más pesa a la hora de vender: pisos nuevos en toda la propiedad, una cocina completa con cubierta de mármol y muebles de madera, pintura general y terminaciones. El total de trámites de la adjudicación más la remodelación fue de $5.500.000.' },
+      { type: 'img', src: '/img/caso-cocina.jpg', caption: 'El resultado: cocina nueva con cubierta de mármol y piso flotante.' },
+      { type: 'p', text: 'La lógica es simple: cada peso invertido en la puesta en valor se recupera con creces en el precio de venta, porque el comprador final paga por una propiedad lista para habitar, no por un proyecto.' },
+      { type: 'h2', text: 'Los números de la operación' },
+      {
+        type: 'numeros',
+        items: [
+          { label: 'Compra en remate', valor: '$64.000.000' },
+          { label: 'Trámites + remodelación', valor: '$5.500.000' },
+          { label: 'Inversión total', valor: '$69.500.000' },
+          { label: 'Precio de venta', valor: '$95.000.000' },
+          { label: 'Utilidad de la operación', valor: '$25.500.000', nota: 'Equivale a un 36,7% sobre lo invertido.', destacado: true },
+        ],
+      },
+      { type: 'p', text: 'Comprar bien es la mitad del negocio; la otra mitad es ejecutar la puesta en valor con criterio y controlar cada costo. Cuando ambas cosas se hacen con disciplina, el resultado se ve en la utilidad final.' },
+      { type: 'p', text: 'Cada operación es distinta y las rentabilidades pasadas no garantizan resultados futuros; además, toda venta tiene costos e impuestos asociados según cada caso. Pero la lógica se repite: información completa, disciplina en el precio de compra y una remodelación bien administrada.' },
+    ],
+  },
+  {
+    slug: 'financiamiento-para-comprar-en-remate',
+    image: '/img/blog-financiamiento.jpg',
+    title: 'Financiamiento para comprar en remate: lo que debes saber',
+    category: 'Fundamentos',
+    date: '20 de abril, 2026',
+    readTime: '6 min',
+    gradient: 'from-forest to-navy-soft',
+    excerpt:
+      'Los remates exigen liquidez y plazos acotados. Revisamos las alternativas reales: capital propio, créditos de consumo estructurados y refinanciamiento posterior.',
+    content: [
+      { type: 'p', text: 'La pregunta más frecuente que recibimos: "¿puedo comprar en remate con crédito hipotecario?". La respuesta corta es que no de la forma tradicional, porque el tribunal exige el pago del saldo de precio en plazos que los bancos no alcanzan a procesar. Pero existen caminos.' },
+      { type: 'h2', text: 'Capital propio: el camino directo' },
+      { type: 'p', text: 'Quien dispone del capital completo tiene la posición más fuerte: puede postular con libertad y cerrar rápido. Es también el perfil que captura los mejores descuentos, porque muchos competidores quedan fuera precisamente por falta de liquidez.' },
+      { type: 'h2', text: 'Estructuras mixtas y refinanciamiento' },
+      { type: 'p', text: 'Una estrategia habitual es financiar la compra con capital propio más instrumentos de corto plazo, y una vez inscrita la propiedad, obtener un crédito con garantía hipotecaria sobre ella para recuperar liquidez. Bien ejecutada, permite repetir el ciclo de inversión con el mismo capital base.' },
+      { type: 'p', text: 'En la asesoría inicial evaluamos tu capacidad financiera real y te decimos con honestidad si los remates son el vehículo adecuado para tu momento. Si no lo son, también te lo diremos.' },
+    ],
+  },
+  {
+    slug: 'que-pasa-despues-de-adjudicarse-un-remate',
+    image: '/img/blog-despues.jpg',
+    title: 'Te adjudicaste el remate: ¿y ahora qué?',
+    category: 'Estrategia',
+    date: '5 de abril, 2026',
+    readTime: '6 min',
+    gradient: 'from-jade to-forest',
+    excerpt:
+      'La subasta es solo la mitad del camino. Escritura, inscripción, entrega de la propiedad y puesta en valor: el mapa completo post-adjudicación.',
+    content: [
+      { type: 'p', text: 'Ganar la subasta se siente como la meta, pero en realidad es el punto de partida de la segunda mitad del proceso. Esta etapa, bien gestionada, toma entre 60 y 120 días. Mal gestionada, puede tomar mucho más.' },
+      { type: 'h2', text: 'Del acta a la inscripción' },
+      { type: 'p', text: 'Tras el remate se firma el acta, se paga el saldo de precio en el plazo fijado en las bases y se extiende la escritura de adjudicación. Con la escritura inscrita en el Conservador de Bienes Raíces, la propiedad queda legalmente a tu nombre.' },
+      { type: 'h2', text: 'La entrega de la propiedad' },
+      { type: 'p', text: 'Si la propiedad está ocupada, se solicita el lanzamiento ante el mismo tribunal. Es un procedimiento reglado, con plazos conocidos, que en la gran mayoría de los casos se resuelve sin conflicto. Saber gestionarlo —y haberlo previsto en el análisis previo— es parte esencial de la asesoría.' },
+      { type: 'p', text: 'Finalmente viene la puesta en valor: regularizaciones, reparaciones y la decisión de arrendar o vender. En K2 acompañamos hasta esta última etapa, porque la rentabilidad se concreta recién cuando la propiedad produce.' },
+    ],
+  },
+]
