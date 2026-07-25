@@ -59,9 +59,11 @@ export async function ocupadosEnCalendario(desde: string, hasta: string) {
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       // Ventana amplia (±12 h) para cubrir cualquier desfase horario; el choque
-      // exacto por bloque lo filtra quien llama.
-      timeMin: `${desde}T00:00:00-12:00`,
-      timeMax: `${hasta}T23:59:59+12:00`,
+      // exacto por bloque lo filtra quien llama. El offset +12/-12 ENSANCHA la
+      // ventana (timeMin más temprano en UTC, timeMax más tarde), evitando que
+      // en consultas de un solo día el rango quede invertido.
+      timeMin: `${desde}T00:00:00+12:00`,
+      timeMax: `${hasta}T23:59:59-12:00`,
       timeZone: TZ,
       items: [{ id: CALENDAR_ID }],
     }),

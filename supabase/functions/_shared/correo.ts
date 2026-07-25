@@ -70,8 +70,9 @@ export async function enviarCorreo(
 const envoltorio = (contenido: string) => `
 <div style="background:#f4f4f2;padding:32px 16px;font-family:Arial,Helvetica,sans-serif">
   <div style="max-width:560px;margin:auto;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)">
-    <div style="background:#0E4B3A;padding:28px 32px;text-align:center">
-      <div style="color:#F7F5EF;font-size:11px;letter-spacing:4px;text-transform:uppercase">Inversiones</div>
+    <div style="background:#0B1220;padding:28px 32px;text-align:center">
+      <img src="${SITIO_URL}/logo-k2-mark.png" alt="Inversiones K2" width="64" style="height:auto;display:inline-block;border:0" />
+      <div style="color:#F7F5EF;font-size:12px;letter-spacing:5px;text-transform:uppercase;margin-top:12px">Inversiones</div>
       <div style="color:#C9A24B;font-size:30px;font-weight:bold;font-family:Georgia,serif;line-height:1.1">K2</div>
     </div>
     <div style="padding:32px">${contenido}</div>

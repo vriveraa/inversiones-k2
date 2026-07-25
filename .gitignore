@@ -9,6 +9,14 @@ dist
 # Credenciales y notas privadas — nunca subir al repositorio
 CREDENCIALES.md
 Supabase contraseña*.txt
+# Carpeta con logins y API keys (NIC, Resend, etc.) — jamás al repo:
+# subirlas hace que Resend/GitHub las detecten y REVOQUEN automáticamente.
+nic/
+# Credenciales OAuth de Google (client secret / refresh token)
+cliente oauth*.json
+*oauth*.json
+*client_secret*.json
+*credentials*.json
 
 # Material original de trabajo (ya procesado dentro de public/; no se despliega)
 material visual de remate ganador/

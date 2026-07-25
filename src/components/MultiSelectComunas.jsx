@@ -19,7 +19,7 @@ export default function MultiSelectComunas({ value, onChange }) {
     const q = normalize(query)
     return COMUNAS.filter(
       (c) => normalize(c).includes(q) && !value.includes(c),
-    ).slice(0, 7)
+    ).slice(0, 40)
   }, [query, value])
 
   const add = (comuna) => {
@@ -122,7 +122,7 @@ export default function MultiSelectComunas({ value, onChange }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18 }}
-            className="glass absolute z-20 mt-2 w-full overflow-hidden !rounded-xl border-gold/25 shadow-premium"
+            className="glass absolute z-20 mt-2 max-h-64 w-full overflow-y-auto overscroll-contain !rounded-xl border-gold/25 shadow-premium"
           >
             {results.map((comuna, i) => (
               <li key={comuna} role="option" aria-selected={i === highlighted}>

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react'
+import { Instagram, Linkedin, Mail, Phone } from 'lucide-react'
 import Logo from './Logo.jsx'
 
 const NAV = [
@@ -48,14 +48,6 @@ export default function Footer() {
           <div>
             <h3 className="eyebrow mb-5">Contacto</h3>
             <ul className="space-y-3 text-sm text-ivory/70">
-              <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" aria-hidden="true" />
-                <span>
-                  Av. Apoquindo 4700, of. 1102
-                  <br />
-                  Las Condes, Santiago
-                </span>
-              </li>
               <li>
                 <a
                   href="mailto:contacto@inversionesk2.cl"
@@ -67,11 +59,11 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="tel:+56912345678"
+                  href="tel:+56998200941"
                   className="flex items-center gap-3 transition-colors hover:text-champagne"
                 >
                   <Phone className="h-4 w-4 shrink-0 text-gold" aria-hidden="true" />
-                  +56 9 1234 5678
+                  +56 9 9820 0941
                 </a>
               </li>
             </ul>
