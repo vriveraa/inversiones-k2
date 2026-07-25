@@ -9,7 +9,7 @@
 // Deploy: supabase functions deploy reservar --no-verify-jwt
 
 import { CORS, json, db, SLOTS, DURACION_MIN, inicioDelBloque } from '../_shared/comun.ts'
-import { ocupadosEnOutlook, graphConfigurado } from '../_shared/graph.ts'
+import { ocupadosEnCalendario, calendarioConfigurado } from '../_shared/calendario.ts'
 import { enviarCorreo, correoConfirmarCliente, type Reserva } from '../_shared/correo.ts'
 
 /** Horas que tiene el cliente para confirmar antes de perder el cupo. */
@@ -61,9 +61,9 @@ Deno.serve(async (req) => {
     }
 
     // ---- El horario no debe chocar con el calendario del asesor ----
-    if (graphConfigurado) {
+    if (calendarioConfigurado) {
       try {
-        const intervalos = await ocupadosEnOutlook(agenda.fecha, agenda.fecha)
+        const intervalos = await ocupadosEnCalendario(agenda.fecha, agenda.fecha)
         const ini = inicioDelBloque(agenda.fecha, agenda.hora)
         const fin = new Date(ini.getTime() + DURACION_MIN * 60_000)
         if (intervalos.some((e) => ini < e.fin && fin > e.inicio)) {

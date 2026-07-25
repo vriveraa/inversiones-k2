@@ -9,7 +9,7 @@
 // Deploy: supabase functions deploy confirmar --no-verify-jwt
 
 import { CORS, json, db } from '../_shared/comun.ts'
-import { crearEventoOutlook, graphConfigurado } from '../_shared/graph.ts'
+import { crearEventoCalendario, calendarioConfigurado } from '../_shared/calendario.ts'
 import {
   enviarCorreo,
   correoConfirmadaCliente,
@@ -64,14 +64,14 @@ Deno.serve(async (req) => {
     const r = reserva as Reserva & { id: string }
 
     // ---- Evento en el calendario del asesor (best-effort) ----
-    if (graphConfigurado) {
+    if (calendarioConfigurado) {
       try {
-        const eventoId = await crearEventoOutlook(r)
+        const eventoId = await crearEventoCalendario(r)
         await sb.from('reservas').update({ evento_outlook_id: eventoId }).eq('id', reserva.id)
       } catch (err) {
         // No se revierte la confirmación: la reserva es válida igual. El asesor
         // la ve en el panel y recibe el correo.
-        console.error('[K2] No se pudo crear el evento en Outlook:', err)
+        console.error('[K2] No se pudo crear el evento en el calendario:', err)
       }
     }
 

@@ -9,7 +9,7 @@
 // Deploy: supabase functions deploy disponibilidad --no-verify-jwt
 
 import { CORS, json, db, SLOTS, DURACION_MIN, clave, inicioDelBloque, dias } from '../_shared/comun.ts'
-import { ocupadosEnOutlook, graphConfigurado } from '../_shared/graph.ts'
+import { ocupadosEnCalendario, calendarioConfigurado } from '../_shared/calendario.ts'
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS })
@@ -30,13 +30,13 @@ Deno.serve(async (req) => {
     if (error) throw error
     for (const r of data ?? []) ocupados.add(clave(r.fecha, r.hora))
 
-    // 2) Compromisos del asesor en Outlook.
+    // 2) Compromisos del asesor en Google Calendar.
     //    Si falla, se degrada: se devuelve solo lo de la base y se avisa con
     //    `calendarioOk: false` en vez de romper el agendamiento.
     let calendarioOk = false
-    if (graphConfigurado) {
+    if (calendarioConfigurado) {
       try {
-        const intervalos = await ocupadosEnOutlook(desde, hasta)
+        const intervalos = await ocupadosEnCalendario(desde, hasta)
         for (const dia of dias(desde, hasta)) {
           for (const hora of SLOTS) {
             const ini = inicioDelBloque(dia, hora)

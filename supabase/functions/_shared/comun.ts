@@ -56,11 +56,24 @@ export const DURACION_MIN = 30
 /** Clave de un bloque: 'YYYY-MM-DD|HH:MM' */
 export const clave = (fecha: string, hora: string) => `${fecha}|${hora}`
 
-/** Date local (Chile) para un bloque dado. */
+/**
+ * Instante ABSOLUTO correcto de una hora de pared de Chile.
+ *
+ * Las Edge Functions corren en UTC, así que `new Date(y,m,d,h,mm)` daría la
+ * hora en UTC, no en Chile. Aquí calculamos el desfase real de America/Santiago
+ * para esa fecha (respetando el horario de verano) y devolvemos el Date correcto.
+ */
 export function inicioDelBloque(fecha: string, hora: string) {
   const [y, m, d] = fecha.split('-').map(Number)
   const [hh, mm] = hora.split(':').map(Number)
-  return new Date(y, m - 1, d, hh, mm)
+
+  // 1) Instante que sería esa hora en UTC.
+  const utc = Date.UTC(y, m - 1, d, hh, mm)
+  // 2) Qué hora de pared marca ese instante en Santiago.
+  const enSantiago = new Date(utc).toLocaleString('en-US', { timeZone: 'America/Santiago' })
+  // 3) El desfase = diferencia entre ambas; se corrige para que la pared coincida.
+  const desfase = utc - new Date(enSantiago).getTime()
+  return new Date(utc + desfase)
 }
 
 /** Recorre los días entre dos fechas ('YYYY-MM-DD'), inclusive. */
