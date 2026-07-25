@@ -169,6 +169,70 @@ export function correoNuevaAsesoriaAsesor(r: Reserva) {
   }
 }
 
+// ============================================================================
+// Formulario 2 de calificación — un correo por clasificación.
+// ============================================================================
+
+/** activo → felicita e invita a agendar la segunda llamada. */
+export function correoCalificacionActivo(nombre: string) {
+  const enlace = `${SITIO_URL}/agendar`
+  return {
+    subject: 'Avancemos con tu inversión · Inversiones K2',
+    html: envoltorio(`
+      <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
+        ${nombre}, demos el siguiente paso
+      </h1>
+      <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
+        Revisamos tus respuestas y calzas con el perfil de inversión que trabajamos.
+        Agendemos una segunda reunión para revisar oportunidades concretas y los
+        próximos pasos.
+      </p>
+      ${boton(enlace, 'Agendar mi segunda reunión')}
+      <p style="margin:22px 0 0;font-size:12px;line-height:1.7;color:#9ca3af">
+        Si el botón no funciona, copia y pega este enlace:<br />${enlace}
+      </p>`),
+  }
+}
+
+/** nurture → agradece y suma a la lista mensual de oportunidades. */
+export function correoCalificacionNurture(nombre: string) {
+  return {
+    subject: 'Gracias por tu interés · Inversiones K2',
+    html: envoltorio(`
+      <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
+        Gracias, ${nombre}
+      </h1>
+      <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
+        Por ahora el timing o los fondos no calzan del todo con las oportunidades
+        que tenemos en mano, pero eso cambia seguido. Te sumamos a nuestra
+        <strong>lista mensual de oportunidades</strong>: te escribiremos cuando
+        aparezca algo que encaje con lo que buscas.
+      </p>
+      <p style="margin:22px 0 0;font-size:13px;line-height:1.7;color:#6B7280">
+        Cuando quieras retomar, respóndenos este correo y coordinamos.
+      </p>`),
+  }
+}
+
+/** cierre → agradece de forma amable, sin lista mensual. */
+export function correoCalificacionCierre(nombre: string) {
+  return {
+    subject: 'Gracias por tu tiempo · Inversiones K2',
+    html: envoltorio(`
+      <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
+        Gracias, ${nombre}
+      </h1>
+      <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
+        Por ahora no logramos calzar con lo que necesitas, y preferimos ser
+        honestos antes que hacerte perder el tiempo. Cuando cambien las
+        condiciones, escríbenos y con gusto lo revisamos de nuevo.
+      </p>
+      <p style="margin:22px 0 0;font-size:13px;line-height:1.7;color:#6B7280">
+        Te deseamos mucho éxito en tus decisiones de inversión.
+      </p>`),
+  }
+}
+
 /**
  * Archivo .ics para que el cliente agregue la cita a su calendario.
  * Se genera en UTC para evitar problemas de zona horaria entre clientes de correo.

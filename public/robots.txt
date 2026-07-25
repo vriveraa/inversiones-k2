@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Formulario 2 de calificación: acceso solo por link privado con token.
+Disallow: /calificacion/
+Disallow: /confirmar
+Disallow: /admin

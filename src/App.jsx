@@ -9,6 +9,7 @@ import Agendar from './pages/Agendar.jsx'
 import TuAsesor from './pages/TuAsesor.jsx'
 import BlogPost from './pages/BlogPost.jsx'
 import Confirmar from './pages/Confirmar.jsx'
+import Calificacion from './pages/Calificacion.jsx'
 import Admin from './pages/Admin.jsx'
 import { EASE } from './components/Reveal.jsx'
 
@@ -49,25 +50,30 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const location = useLocation()
 
-  // El panel del asesor (/admin) usa su propio layout, sin la navegación
-  // pública ni el preloader de marca.
+  // Páginas privadas con su propio layout, sin navegación pública ni preloader:
+  // el panel del asesor (/admin) y el Formulario 2 por link privado (/calificacion).
   const isAdmin = location.pathname.startsWith('/admin')
+  const isStandalone = isAdmin || location.pathname.startsWith('/calificacion')
 
   // Preloader de marca (~1.4s) solo en la carga inicial del sitio público
   useEffect(() => {
-    if (isAdmin) {
+    if (isStandalone) {
       setLoading(false)
       return
     }
     const t = setTimeout(() => setLoading(false), 1400)
     return () => clearTimeout(t)
-  }, [isAdmin])
+  }, [isStandalone])
 
-  if (isAdmin) {
+  if (isStandalone) {
     return (
-      <Routes>
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
+      <>
+        <ScrollManager />
+        <Routes>
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/calificacion/:token" element={<Calificacion />} />
+        </Routes>
+      </>
     )
   }
 
