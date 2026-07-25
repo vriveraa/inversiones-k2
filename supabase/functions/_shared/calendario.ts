@@ -83,8 +83,11 @@ export async function ocupadosEnCalendario(desde: string, hasta: string) {
 }
 
 /**
- * Crea la asesoría en el calendario del asesor, con el cliente como invitado
- * (Google le envía la invitación por correo). Devuelve el id del evento.
+ * Crea la asesoría en el calendario del asesor, con el cliente como invitado.
+ * Google NO le envía correo al cliente (sendUpdates=none): la confirmación al
+ * cliente la manda nuestro sistema desde reservas@inversionesk2.cl con el .ics,
+ * para no duplicar el aviso ni exponer la casilla personal del asesor.
+ * Devuelve el id del evento.
  */
 export async function crearEventoCalendario(reserva: {
   nombre: string
@@ -131,7 +134,7 @@ export async function crearEventoCalendario(reserva: {
   }
 
   const res = await fetch(
-    `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?sendUpdates=all`,
+    `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?sendUpdates=none`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
