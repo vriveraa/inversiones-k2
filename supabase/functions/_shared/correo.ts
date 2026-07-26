@@ -9,6 +9,16 @@
 
 import { clp, fechaLarga } from './formato.ts'
 
+/**
+ * Escapa HTML para que ningún dato del cliente (nombre, comuna, teléfono, etc.)
+ * pueda inyectar etiquetas en las plantillas de correo. Defensa contra HTML/
+ * content injection en los correos, incluido el que recibe el asesor.
+ */
+const esc = (v: unknown) =>
+  String(v ?? '').replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
+  )
+
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
 const FROM_EMAIL = Deno.env.get('FROM_EMAIL') ?? 'Inversiones K2 <onboarding@resend.dev>'
 export const ASESOR_EMAIL = Deno.env.get('ASESOR_EMAIL')
@@ -88,13 +98,13 @@ const detalleReserva = (r: Reserva) => `
     <tr><td style="padding:7px 0;color:#6B7280">Fecha</td>
         <td style="text-align:right;color:#0B1220"><strong>${fechaLarga(r.fecha)}</strong></td></tr>
     <tr><td style="padding:7px 0;color:#6B7280">Hora</td>
-        <td style="text-align:right;color:#0B1220"><strong>${r.hora} hrs</strong></td></tr>
+        <td style="text-align:right;color:#0B1220"><strong>${esc(r.hora)} hrs</strong></td></tr>
     <tr><td style="padding:7px 0;color:#6B7280">Duración</td>
         <td style="text-align:right;color:#0B1220">30 minutos</td></tr>
     <tr><td style="padding:7px 0;color:#6B7280">Propiedad</td>
-        <td style="text-align:right;color:#0B1220">${r.tipos.join(', ')}</td></tr>
+        <td style="text-align:right;color:#0B1220">${r.tipos.map(esc).join(', ')}</td></tr>
     <tr><td style="padding:7px 0;color:#6B7280">Comunas</td>
-        <td style="text-align:right;color:#0B1220">${r.comunas.join(', ')}</td></tr>
+        <td style="text-align:right;color:#0B1220">${r.comunas.map(esc).join(', ')}</td></tr>
     <tr><td style="padding:7px 0;color:#6B7280">Presupuesto</td>
         <td style="text-align:right;color:#0B1220">${clp(r.presupuesto_min)} – ${clp(r.presupuesto_max)}</td></tr>
   </table>`
@@ -111,7 +121,7 @@ export function correoConfirmarCliente(r: Reserva, horasPlazo: number) {
     subject: 'Confirma tu asesoría · Inversiones K2',
     html: envoltorio(`
       <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
-        ${r.nombre}, falta un paso
+        ${esc(r.nombre)}, falta un paso
       </h1>
       <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
         Recibimos tu solicitud de asesoría. Para dejarla agendada en firme,
@@ -138,7 +148,7 @@ export function correoConfirmadaCliente(r: Reserva) {
         ¡Tu asesoría está confirmada!
       </h1>
       <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
-        ${r.nombre}, tu asesor te llamará al <strong>${r.telefono}</strong> en el
+        ${esc(r.nombre)}, tu asesor te llamará al <strong>${esc(r.telefono)}</strong> en el
         horario acordado. Adjuntamos la cita para que la agregues a tu calendario.
       </p>
       ${detalleReserva(r)}
@@ -157,9 +167,9 @@ export function correoNuevaAsesoriaAsesor(r: Reserva) {
       <h1 style="margin:0 0 6px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
         Nueva asesoría confirmada
       </h1>
-      <p style="margin:0 0 4px;font-size:16px;color:#0B1220"><strong>${r.nombre} ${r.apellido}</strong></p>
+      <p style="margin:0 0 4px;font-size:16px;color:#0B1220"><strong>${esc(r.nombre)} ${esc(r.apellido)}</strong></p>
       <p style="margin:0;font-size:13px;color:#6B7280">
-        ${r.email} · ${r.telefono} · RUT ${r.rut}
+        ${esc(r.email)} · ${esc(r.telefono)} · RUT ${esc(r.rut)}
       </p>
       <hr style="border:none;border-top:1px solid #eee;margin:18px 0" />
       ${detalleReserva(r)}
@@ -179,7 +189,7 @@ export function correoInvitacionCalificacion(nombre: string, link: string) {
     subject: 'Un paso más para tu asesoría · Inversiones K2',
     html: envoltorio(`
       <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
-        ${nombre}, gracias por conversar con nosotros
+        ${esc(nombre)}, gracias por conversar con nosotros
       </h1>
       <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
         Para preparar la siguiente etapa y enfocarnos en oportunidades reales para ti,
@@ -200,7 +210,7 @@ export function correoCalificacionActivo(nombre: string) {
     subject: 'Avancemos con tu inversión · Inversiones K2',
     html: envoltorio(`
       <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
-        ${nombre}, demos el siguiente paso
+        ${esc(nombre)}, demos el siguiente paso
       </h1>
       <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
         Revisamos tus respuestas y calzas con el perfil de inversión que trabajamos.
@@ -220,7 +230,7 @@ export function correoCalificacionNurture(nombre: string) {
     subject: 'Gracias por tu interés · Inversiones K2',
     html: envoltorio(`
       <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
-        Gracias, ${nombre}
+        Gracias, ${esc(nombre)}
       </h1>
       <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
         Por ahora el timing o los fondos no calzan del todo con las oportunidades
@@ -240,7 +250,7 @@ export function correoCalificacionCierre(nombre: string) {
     subject: 'Gracias por tu tiempo · Inversiones K2',
     html: envoltorio(`
       <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
-        Gracias, ${nombre}
+        Gracias, ${esc(nombre)}
       </h1>
       <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
         Por ahora no logramos calzar con lo que necesitas, y preferimos ser
