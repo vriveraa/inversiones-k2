@@ -47,6 +47,10 @@ Deno.serve(async (req) => {
     if (errLead) throw errLead
     if (!lead) return json({ error: 'No encontramos ese lead.' }, 404)
 
+    // Invalida cualquier link anterior sin usar de este lead: así solo queda
+    // UN link activo a la vez y no hay enlaces viejos dando vueltas.
+    await sb.from('calificacion_tokens').delete().eq('lead_id', lead_id).eq('used', false)
+
     // Token nuevo del Formulario 2.
     const expira = new Date(Date.now() + DIAS_VALIDEZ * 24 * 3600 * 1000).toISOString()
     const { data: tk, error: errTok } = await sb
