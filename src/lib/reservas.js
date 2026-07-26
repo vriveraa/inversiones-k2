@@ -29,6 +29,7 @@ const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 export const ESTADOS = [
   { id: 'pendiente', label: 'Pendiente' },
   { id: 'contactado', label: 'Contactado' },
+  { id: 'prospecto', label: 'Prospecto' },
   { id: 'realizada', label: 'Reunión realizada' },
   { id: 'cliente', label: 'Cliente' },
   { id: 'descartado', label: 'Descartado' },

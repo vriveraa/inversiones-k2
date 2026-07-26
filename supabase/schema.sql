@@ -41,7 +41,7 @@ alter table public.reservas add constraint reservas_slot_unico unique (fecha, ho
 -- pendiente -> contactado -> realizada -> cliente | descartado
 alter table public.reservas drop constraint if exists reservas_estado_valido;
 alter table public.reservas add constraint reservas_estado_valido
-  check (estado in ('pendiente', 'contactado', 'realizada', 'cliente', 'descartado'));
+  check (estado in ('pendiente', 'contactado', 'prospecto', 'realizada', 'cliente', 'descartado'));
 
 -- ---------------------------------------------------------------------------
 -- 1b. Confirmación del cliente por correo

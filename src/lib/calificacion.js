@@ -58,8 +58,29 @@ export async function enviarCalificacion(token, respuestas) {
 }
 
 /**
- * Genera un token para un lead y devuelve el link privado del Formulario 2.
- * Solo para el panel del asesor (requiere sesión iniciada).
+ * Marca un lead como PROSPECTO y le envía el correo con el link del Formulario 2.
+ * Solo para el panel del asesor: usa `functions.invoke`, que adjunta el token de
+ * la sesión iniciada (la Edge Function exige un JWT válido). Deja el lead en
+ * estado 'prospecto'.
+ * @param {string} leadId  id de la reserva (lead)
+ * @returns {Promise<{ error: Error|null, link?: string }>}
+ */
+export async function invitarProspecto(leadId) {
+  if (!supabase) return { error: new Error('Supabase no configurado') }
+  const { data, error } = await supabase.functions.invoke('calificacion-invitar', {
+    body: { lead_id: leadId },
+  })
+  if (error) {
+    // El cuerpo de error de la función trae un mensaje legible.
+    const msg = data?.error ?? error.message ?? 'No se pudo enviar la invitación.'
+    return { error: new Error(msg) }
+  }
+  return { error: null, link: data?.link ?? null }
+}
+
+/**
+ * Genera un token para un lead y devuelve el link privado del Formulario 2
+ * SIN enviar correo (por si el asesor quiere copiar el link a mano).
  * @param {string} leadId  id de la reserva (lead)
  * @param {number} diasValidez  días hasta que expire (por defecto 30)
  */

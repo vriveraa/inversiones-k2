@@ -173,6 +173,26 @@ export function correoNuevaAsesoriaAsesor(r: Reserva) {
 // Formulario 2 de calificación — un correo por clasificación.
 // ============================================================================
 
+/** 0) El asesor marca al lead como prospecto → se le envía el link del Form 2. */
+export function correoInvitacionCalificacion(nombre: string, link: string) {
+  return {
+    subject: 'Un paso más para tu asesoría · Inversiones K2',
+    html: envoltorio(`
+      <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:#0E4B3A">
+        ${nombre}, gracias por conversar con nosotros
+      </h1>
+      <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563">
+        Para preparar la siguiente etapa y enfocarnos en oportunidades reales para ti,
+        necesitamos algunos datos. Te toma menos de 2 minutos:
+      </p>
+      ${boton(link, 'Completar mi formulario')}
+      <p style="margin:22px 0 0;font-size:12px;line-height:1.7;color:#9ca3af">
+        Este enlace es personal y de un solo uso. Si el botón no funciona, copia y
+        pega:<br />${link}
+      </p>`),
+  }
+}
+
 /** activo → felicita e invita a agendar la segunda llamada. */
 export function correoCalificacionActivo(nombre: string) {
   const enlace = `${SITIO_URL}/agendar`

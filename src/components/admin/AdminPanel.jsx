@@ -13,9 +13,12 @@ import {
   Check,
   Loader2,
   MailWarning,
+  Send,
+  Ban,
 } from 'lucide-react'
 import { LogoIcon } from '../Logo.jsx'
 import { listarReservas, actualizarReserva, ESTADOS } from '../../lib/reservas.js'
+import { invitarProspecto } from '../../lib/calificacion.js'
 import { formatCLP } from '../../utils/format.js'
 
 /** 'YYYY-MM-DD' -> Date local (evita el corrimiento por zona horaria). */
@@ -37,10 +40,19 @@ const fechaLarga = (s) =>
 const ESTADO_STYLE = {
   pendiente: 'border-gold/50 bg-gold/10 text-gold',
   contactado: 'border-sky-400/50 bg-sky-400/10 text-sky-300',
+  prospecto: 'border-teal-400/50 bg-teal-400/10 text-teal-300',
   realizada: 'border-violet-400/50 bg-violet-400/10 text-violet-300',
   cliente: 'border-emerald-400/60 bg-emerald-400/15 text-emerald-300',
   descartado: 'border-white/20 bg-white/5 text-ivory/50',
 }
+
+/** Resultado del Formulario 2 (calificación automática). */
+const CLASIF_STYLE = {
+  activo: 'border-emerald-400/60 bg-emerald-400/15 text-emerald-300',
+  nurture: 'border-amber-400/50 bg-amber-400/10 text-amber-300',
+  cierre: 'border-white/20 bg-white/5 text-ivory/50',
+}
+const CLASIF_LABEL = { activo: 'Activo', nurture: 'Nurture', cierre: 'Cierre' }
 
 export default function AdminPanel({ session, onLogout }) {
   const [reservas, setReservas] = useState([])
@@ -194,6 +206,9 @@ function ReservaCard({ reserva, onPatch, hoy }) {
   const [savingEstado, setSavingEstado] = useState(false)
   const [savingNotas, setSavingNotas] = useState(false)
   const [notasGuardadas, setNotasGuardadas] = useState(false)
+  const [invitando, setInvitando] = useState(false)
+  const [invitOk, setInvitOk] = useState(false)
+  const [invitErr, setInvitErr] = useState(null)
 
   const pasada = parseFecha(reserva.fecha) < hoy
   const notasCambiadas = notas !== (reserva.notas ?? '')
@@ -203,6 +218,20 @@ function ReservaCard({ reserva, onPatch, hoy }) {
     const { error } = await actualizarReserva(reserva.id, { estado })
     if (!error) onPatch(reserva.id, { estado })
     setSavingEstado(false)
+  }
+
+  const enviarFormulario2 = async () => {
+    setInvitando(true)
+    setInvitErr(null)
+    const { error } = await invitarProspecto(reserva.id)
+    if (error) {
+      setInvitErr(error.message)
+    } else {
+      onPatch(reserva.id, { estado: 'prospecto' })
+      setInvitOk(true)
+      setTimeout(() => setInvitOk(false), 3000)
+    }
+    setInvitando(false)
   }
 
   const guardarNotas = async () => {
@@ -288,8 +317,58 @@ function ReservaCard({ reserva, onPatch, hoy }) {
           </div>
         </div>
 
-        {/* Gestión: estado + notas */}
+        {/* Gestión: Formulario 2 + estado + notas */}
         <div className="lg:w-56 lg:border-l lg:border-white/10 lg:pl-6">
+          {/* Formulario 2 de calificación */}
+          <div className="mb-5 border-b border-white/5 pb-5">
+            <span className="mb-2 block text-[10px] uppercase tracking-[0.2em] text-ivory/40">
+              Formulario 2
+            </span>
+            {reserva.clasificacion ? (
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${CLASIF_STYLE[reserva.clasificacion] ?? ''}`}
+              >
+                <Check className="h-3 w-3" aria-hidden="true" />
+                Calificado: {CLASIF_LABEL[reserva.clasificacion] ?? reserva.clasificacion}
+              </span>
+            ) : (
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={enviarFormulario2}
+                  disabled={invitando}
+                  className="btn-gold w-full justify-center !py-2 !text-xs"
+                >
+                  {invitando ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                  ) : (
+                    <>
+                      <Send className="h-3.5 w-3.5" aria-hidden="true" />
+                      {reserva.estado === 'prospecto' ? 'Reenviar Formulario 2' : 'Enviar Formulario 2'}
+                    </>
+                  )}
+                </button>
+                {reserva.estado !== 'descartado' && (
+                  <button
+                    type="button"
+                    onClick={() => cambiarEstado('descartado')}
+                    disabled={savingEstado}
+                    className="btn-ghost w-full justify-center !py-2 !text-xs"
+                  >
+                    <Ban className="h-3.5 w-3.5" aria-hidden="true" />
+                    Descartar
+                  </button>
+                )}
+              </div>
+            )}
+            {invitOk && (
+              <p className="mt-2 flex items-center gap-1 text-[11px] text-emerald-300">
+                <Check className="h-3 w-3" aria-hidden="true" /> Correo enviado al cliente
+              </p>
+            )}
+            {invitErr && <p className="mt-2 text-[11px] text-red-300">{invitErr}</p>}
+          </div>
+
           <label className="block">
             <span className="mb-1.5 block text-[10px] uppercase tracking-[0.2em] text-ivory/40">
               Estado
