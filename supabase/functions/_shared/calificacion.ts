@@ -2,9 +2,9 @@
 // clasificación y override por presupuesto. Todo vive en el servidor: la web
 // nunca decide el puntaje ni la clasificación.
 //
-// El frontend envía IDS estables (no textos con tildes) para cada respuesta;
-// aquí se traducen a su etiqueta legible + puntaje. Si un id no existe, la
-// respuesta se rechaza.
+// El frontend envía IDS estables para las selecciones únicas (plazo, fondos,
+// experiencia, disposición) y NOMBRES de comuna (igual que el formulario
+// público, con el buscador de comunas).
 
 // ---------------------------------------------------------------------------
 // AJUSTES EDITABLES POR EL ASESOR
@@ -15,19 +15,15 @@ export const VALOR_UF = 39_500
 
 /**
  * Presupuesto mínimo (en CLP) por comuna para considerar viable la operación.
- * Por defecto TODO en 0 → el override no bloquea a nadie hasta que se ajuste.
- * Las claves deben coincidir con los ids de comuna de OPCIONES.comunas.
+ * Las claves son el NOMBRE de la comuna en minúsculas y sin tildes
+ * (ej. 'las condes', 'nunoa', 'providencia'). Lo que no esté listado vale 0.
+ * Por defecto va vacío → el override no bloquea a nadie hasta que lo ajustes.
+ *
+ * Ejemplo para activarlo:
+ *   'las condes': 300_000_000,
+ *   'vitacura':   350_000_000,
  */
-export const MIN_PRESUPUESTO_POR_COMUNA: Record<string, number> = {
-  las_condes: 0,
-  providencia: 0,
-  nunoa: 0,
-  vitacura: 0,
-  lo_barnechea: 0,
-  estacion_central: 0,
-  concon: 0,
-  otra: 0,
-}
+export const MIN_PRESUPUESTO_POR_COMUNA: Record<string, number> = {}
 
 // ---------------------------------------------------------------------------
 // OPCIONES + PUNTAJES  (id -> { label, puntos })
@@ -63,19 +59,20 @@ export const DISPOSICION: Record<string, Opcion> = {
   no_aun: O('Prefiero no comprometerme aún', 0),
 }
 
-/** Comunas ofrecidas en el Formulario 2 (id -> etiqueta). */
-export const COMUNAS: Record<string, string> = {
-  las_condes: 'Las Condes',
-  providencia: 'Providencia',
-  nunoa: 'Ñuñoa',
-  vitacura: 'Vitacura',
-  lo_barnechea: 'Lo Barnechea',
-  estacion_central: 'Estación Central',
-  concon: 'Concón',
-  otra: 'Otra',
+export const UNIDADES = ['CLP', 'UF'] as const
+
+/** minúsculas + sin tildes, para comparar nombres de comuna de forma robusta. */
+function normalizar(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .trim()
 }
 
-export const UNIDADES = ['CLP', 'UF'] as const
+function minComuna(nombre: string): number {
+  return MIN_PRESUPUESTO_POR_COMUNA[normalizar(nombre)] ?? 0
+}
 
 // ---------------------------------------------------------------------------
 // CÁLCULO
@@ -96,8 +93,7 @@ export interface Calificacion {
   presupuesto_maximo: number
   presupuesto_unidad: string
   presupuesto_clp: number
-  comunas: string[] // etiquetas legibles
-  comunasIds: string[]
+  comunas: string[]
   plazo: string
   fondos: string
   experiencia: string
@@ -134,10 +130,11 @@ export function calificar(
     return { ok: false, error: 'Unidad de presupuesto inválida' }
   }
 
-  // Comunas (al menos una, todas válidas)
-  const comunasIds = Array.isArray(r.comunas) ? (r.comunas as unknown[]).map(String) : []
-  if (comunasIds.length === 0) return { ok: false, error: 'Selecciona al menos una comuna' }
-  if (comunasIds.some((c) => !(c in COMUNAS))) return { ok: false, error: 'Comuna inválida' }
+  // Comunas: nombres (igual que el formulario público). Al menos una.
+  const comunas = Array.isArray(r.comunas)
+    ? [...new Set((r.comunas as unknown[]).map((c) => String(c).trim()).filter(Boolean))].slice(0, 20)
+    : []
+  if (comunas.length === 0) return { ok: false, error: 'Selecciona al menos una comuna' }
 
   // Selecciones únicas
   const plazo = String(r.plazo ?? '')
@@ -161,7 +158,7 @@ export function calificar(
   // Override por presupuesto: si el monto (en CLP) queda bajo el mínimo de
   // TODAS las comunas elegidas, se fuerza 'cierre' y se marca para revisión.
   const clp = presupuestoEnCLP(monto, unidad)
-  const fallaTodas = comunasIds.every((c) => clp < (MIN_PRESUPUESTO_POR_COMUNA[c] ?? 0))
+  const fallaTodas = comunas.every((c) => clp < minComuna(c))
   if (fallaTodas) clasificacion = 'cierre'
 
   const comentarios = typeof r.comentarios === 'string' ? r.comentarios.trim().slice(0, 2000) : ''
@@ -172,8 +169,7 @@ export function calificar(
       presupuesto_maximo: monto,
       presupuesto_unidad: unidad,
       presupuesto_clp: clp,
-      comunas: comunasIds.map((c) => COMUNAS[c]),
-      comunasIds,
+      comunas,
       plazo: PLAZO[plazo].label,
       fondos: FONDOS[fondos].label,
       experiencia: EXPERIENCIA[experiencia].label,

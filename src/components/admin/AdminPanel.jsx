@@ -15,6 +15,8 @@ import {
   MailWarning,
   Send,
   Ban,
+  AlertTriangle,
+  ClipboardList,
 } from 'lucide-react'
 import { LogoIcon } from '../Logo.jsx'
 import { listarReservas, actualizarReserva, ESTADOS } from '../../lib/reservas.js'
@@ -212,6 +214,11 @@ function ReservaCard({ reserva, onPatch, hoy }) {
 
   const pasada = parseFecha(reserva.fecha) < hoy
   const notasCambiadas = notas !== (reserva.notas ?? '')
+
+  // Calificación del Formulario 2 (la más reciente si hubiera varias).
+  const calif = (reserva.calificaciones ?? [])
+    .slice()
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0]
 
   const cambiarEstado = async (estado) => {
     setSavingEstado(true)
@@ -425,6 +432,71 @@ function ReservaCard({ reserva, onPatch, hoy }) {
           )}
         </div>
       </div>
+
+      {/* Resultado del Formulario 2 (segmentación completa) */}
+      {calif && <CalificacionDetalle calif={calif} listaMensual={reserva.lista_mensual} />}
     </li>
+  )
+}
+
+/** Detalle de la calificación del Formulario 2 para el asesor. */
+function CalificacionDetalle({ calif, listaMensual }) {
+  const presupuesto =
+    calif.presupuesto_unidad === 'UF'
+      ? `${calif.presupuesto_maximo} UF · ${formatCLP(calif.presupuesto_clp)}`
+      : formatCLP(calif.presupuesto_maximo)
+
+  return (
+    <div className="mt-5 rounded-xl border border-gold/15 bg-gold/[0.03] p-4 sm:p-5">
+      <div className="flex flex-wrap items-center gap-2.5">
+        <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.2em] text-ivory/45">
+          <ClipboardList className="h-3.5 w-3.5 text-gold" aria-hidden="true" />
+          Formulario 2 — Resultado
+        </span>
+        <span
+          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${CLASIF_STYLE[calif.clasificacion] ?? ''}`}
+        >
+          {CLASIF_LABEL[calif.clasificacion] ?? calif.clasificacion}
+        </span>
+        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-ivory/70">
+          Puntaje {calif.puntaje_total}/11
+        </span>
+        {listaMensual && (
+          <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 text-xs text-amber-300">
+            Lista mensual
+          </span>
+        )}
+        {calif.revisar_presupuesto && (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-red-400/40 bg-red-400/10 px-3 py-1 text-xs text-red-300">
+            <AlertTriangle className="h-3 w-3" aria-hidden="true" /> Revisar presupuesto
+          </span>
+        )}
+      </div>
+
+      <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
+        <Dato label="Presupuesto máximo" value={presupuesto} />
+        <Dato label="Comunas" value={(calif.comunas ?? []).join(' · ')} />
+        <Dato label="Plazo" value={calif.plazo} />
+        <Dato label="Origen de fondos" value={calif.fondos} />
+        <Dato label="Experiencia" value={calif.experiencia} />
+        <Dato label="Dispuesto a mandato" value={calif.disposicion_mandato} />
+      </dl>
+
+      {calif.comentarios && (
+        <div className="mt-4 border-t border-white/5 pt-3">
+          <span className="text-[10px] uppercase tracking-[0.18em] text-ivory/40">Comentarios</span>
+          <p className="mt-1 text-sm leading-relaxed text-ivory/75">{calif.comentarios}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function Dato({ label, value }) {
+  return (
+    <div>
+      <dt className="text-[10px] uppercase tracking-[0.18em] text-ivory/40">{label}</dt>
+      <dd className="mt-0.5 text-ivory/80">{value || '—'}</dd>
+    </div>
   )
 }

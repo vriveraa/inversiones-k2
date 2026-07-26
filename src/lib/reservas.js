@@ -170,12 +170,16 @@ export async function confirmarReserva(token) {
 // Panel del asesor (requiere sesión iniciada)
 // ===========================================================================
 
-/** Lista todas las reservas ordenadas por fecha y hora ascendente. */
+/**
+ * Lista todas las reservas ordenadas por fecha y hora ascendente.
+ * Incluye la calificación del Formulario 2 (si el lead lo completó) para que el
+ * asesor vea la segmentación completa en el panel.
+ */
 export async function listarReservas() {
   if (!supabase) return { data: [], error: new Error('Supabase no está configurado.') }
   const { data, error } = await supabase
     .from('reservas')
-    .select('*')
+    .select('*, calificaciones(*)')
     .order('fecha', { ascending: true })
     .order('hora', { ascending: true })
   return { data: data ?? [], error }

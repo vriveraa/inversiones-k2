@@ -1,16 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight, Check, Loader2, ShieldAlert } from 'lucide-react'
+import { ArrowRight, CalendarCheck, Loader2, ShieldAlert } from 'lucide-react'
 import { validarTokenCalificacion, enviarCalificacion } from '../lib/calificacion.js'
+import MultiSelectComunas from '../components/MultiSelectComunas.jsx'
 import { EASE } from '../components/Reveal.jsx'
 
-// Opciones (los ids DEBEN coincidir con supabase/functions/_shared/calificacion.ts)
-const COMUNAS = [
-  ['las_condes', 'Las Condes'], ['providencia', 'Providencia'], ['nunoa', 'Ñuñoa'],
-  ['vitacura', 'Vitacura'], ['lo_barnechea', 'Lo Barnechea'], ['estacion_central', 'Estación Central'],
-  ['concon', 'Concón'], ['otra', 'Otra'],
-]
+// Selecciones únicas (los ids DEBEN coincidir con
+// supabase/functions/_shared/calificacion.ts). Las comunas van por nombre,
+// con el mismo buscador del formulario público.
 const PLAZO = [
   ['este_mes', 'Este mes'], ['3_meses', 'En los próximos 3 meses'],
   ['6_meses', 'En los próximos 6 meses'], ['sin_plazo', 'Sin plazo definido'],
@@ -44,7 +42,6 @@ const Fondo = ({ children }) => (
 
 export default function Calificacion() {
   const { token } = useParams()
-  const navigate = useNavigate()
 
   const [estado, setEstado] = useState('validando') // validando | form | invalido | enviando | gracias
   const [nombre, setNombre] = useState(null)
@@ -119,30 +116,7 @@ export default function Calificacion() {
   }
 
   if (estado === 'gracias') {
-    const nurture = clasificacion === 'nurture'
-    return (
-      <Fondo>
-        <div className="glass w-full max-w-xl p-10 text-center shadow-premium sm:p-14">
-          <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-gold/25 bg-gold/10">
-            <Check className="h-9 w-9 text-gold" aria-hidden="true" />
-          </span>
-          <h1 className="mt-6 font-display text-2xl font-semibold text-ivory sm:text-3xl">
-            {nombre ? `Gracias, ${nombre}` : 'Gracias'}
-          </h1>
-          <p className="mt-4 text-sm leading-relaxed text-ivory/60">
-            {nurture
-              ? 'Por ahora el timing o los fondos no calzan del todo, pero eso cambia seguido. Te sumamos a nuestra lista mensual de oportunidades y te escribiremos cuando aparezca algo que encaje.'
-              : 'Por ahora no logramos calzar con lo que necesitas. Cuando cambien las condiciones, escríbenos y con gusto lo revisamos de nuevo.'}
-          </p>
-          <div className="hairline mx-auto mt-8 max-w-[10rem]" aria-hidden="true" />
-          <p className="mt-6 text-xs text-ivory/40">Te enviamos también un correo con esta información.</p>
-          <Link to="/" className="btn-gold mt-8">
-            Volver al inicio
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
-      </Fondo>
-    )
+    return <Gracias clasificacion={clasificacion} nombre={nombre} />
   }
 
   // estado === 'form' | 'enviando'
@@ -158,15 +132,108 @@ export default function Calificacion() {
           setEstado(r.motivo === 'datos' || r.motivo === 'servidor' ? 'form' : 'invalido')
           return { error: r.mensaje }
         }
-        if (r.redirigirAgendar) {
-          navigate('/agendar')
-          return {}
-        }
         setClasificacion(r.clasificacion)
         setEstado('gracias')
         return {}
       }}
     />
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Pantallas finales (una por clasificación) — siempre con cierre claro.
+// ---------------------------------------------------------------------------
+
+function Gracias({ clasificacion, nombre }) {
+  const activo = clasificacion === 'activo'
+  const nurture = clasificacion === 'nurture'
+
+  return (
+    <Fondo>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: EASE }}
+        className="glass w-full max-w-xl p-10 text-center shadow-premium sm:p-14"
+      >
+        {/* Check dorado animado */}
+        <svg viewBox="0 0 96 96" className="mx-auto h-24 w-24" fill="none" aria-hidden="true">
+          <motion.circle
+            cx="48" cy="48" r="42" stroke="#C9A24B" strokeWidth="2.5"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ duration: 0.9, ease: EASE }}
+          />
+          <motion.path
+            d="M30 49 L43 62 L67 37"
+            stroke="#E4CE8F" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.55, delay: 0.6, ease: EASE }}
+          />
+        </svg>
+
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7, ease: EASE }}
+        >
+          {activo ? (
+            <>
+              <h1 className="mt-6 font-display text-2xl font-semibold text-ivory sm:text-3xl">
+                {nombre ? `¡Excelente, ${nombre}!` : '¡Excelente!'}
+              </h1>
+              <p className="mt-4 text-sm leading-relaxed text-ivory/65">
+                Tu perfil calza con las oportunidades que trabajamos. El siguiente paso es
+                agendar tu <strong className="text-champagne">segunda reunión</strong> para
+                revisar propiedades concretas.
+              </p>
+              <Link to="/agendar" className="btn-gold mt-8">
+                <CalendarCheck className="h-4 w-4" aria-hidden="true" />
+                Agendar mi segunda reunión
+              </Link>
+              <p className="mt-5 text-xs leading-relaxed text-ivory/40">
+                También te enviamos este enlace por correo, por si prefieres agendar más tarde.
+              </p>
+            </>
+          ) : nurture ? (
+            <>
+              <h1 className="mt-6 font-display text-2xl font-semibold text-ivory sm:text-3xl">
+                {nombre ? `Gracias, ${nombre}` : 'Gracias'}
+              </h1>
+              <p className="mt-4 text-sm leading-relaxed text-ivory/65">
+                Por ahora el timing o los fondos no calzan del todo con lo que tenemos en mano,
+                pero eso cambia seguido. Te sumamos a nuestra{' '}
+                <strong className="text-champagne">lista mensual de oportunidades</strong> y te
+                escribiremos cuando aparezca algo que encaje contigo.
+              </p>
+              <Link to="/" className="btn-gold mt-8">
+                Volver al inicio
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </>
+          ) : (
+            <>
+              <h1 className="mt-6 font-display text-2xl font-semibold text-ivory sm:text-3xl">
+                {nombre ? `Gracias, ${nombre}` : 'Gracias'}
+              </h1>
+              <p className="mt-4 text-sm leading-relaxed text-ivory/65">
+                Agradecemos tu tiempo. Por ahora no logramos calzar con lo que necesitas, y
+                preferimos ser honestos antes que hacerte perder el tiempo. Cuando cambien las
+                condiciones, escríbenos y con gusto lo revisamos de nuevo.
+              </p>
+              <Link to="/" className="btn-gold mt-8">
+                Volver al inicio
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </>
+          )}
+        </motion.div>
+
+        <div className="hairline mx-auto mt-8 max-w-[10rem]" aria-hidden="true" />
+        <p className="mt-6 text-xs text-ivory/40">Te enviamos también un correo con esta información.</p>
+      </motion.div>
+    </Fondo>
   )
 }
 
@@ -186,14 +253,11 @@ function Formulario({ nombre, enviando, onSubmit }) {
   const [errores, setErrores] = useState({})
   const [errorEnvio, setErrorEnvio] = useState(null)
 
-  const toggleComuna = (id) =>
-    setComunas((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]))
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const err = {}
     if (!(Number(presupuesto) > 0)) err.presupuesto = 'Ingresa un presupuesto válido'
-    if (comunas.length === 0) err.comunas = 'Selecciona al menos una comuna'
+    if (comunas.length === 0) err.comunas = 'Agrega al menos una comuna de interés'
     if (!plazo) err.plazo = 'Elige una opción'
     if (!fondos) err.fondos = 'Elige una opción'
     if (!experiencia) err.experiencia = 'Elige una opción'
@@ -256,15 +320,9 @@ function Formulario({ nombre, enviando, onSubmit }) {
             </div>
           </Campo>
 
-          {/* 2. Comunas (multi) */}
+          {/* 2. Comunas (mismo buscador del formulario público) */}
           <Campo label="Comuna(s) de interés" error={errores.comunas}>
-            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-              {COMUNAS.map(([id, label]) => (
-                <Chip key={id} activo={comunas.includes(id)} onClick={() => toggleComuna(id)}>
-                  {label}
-                </Chip>
-              ))}
-            </div>
+            <MultiSelectComunas value={comunas} onChange={setComunas} />
           </Campo>
 
           {/* 3. Plazo */}
@@ -298,9 +356,7 @@ function Formulario({ nombre, enviando, onSubmit }) {
             />
           </Campo>
 
-          {errorEnvio && (
-            <p role="alert" className="text-sm text-red-300">{errorEnvio}</p>
-          )}
+          {errorEnvio && <p role="alert" className="text-sm text-red-300">{errorEnvio}</p>}
 
           <button type="submit" disabled={enviando} className="btn-gold w-full justify-center disabled:opacity-60">
             {enviando ? (
@@ -330,24 +386,6 @@ function Campo({ label, error, children }) {
       {children}
       {error && <p role="alert" className="mt-2 text-xs text-red-300">{error}</p>}
     </div>
-  )
-}
-
-function Chip({ activo, onClick, children }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={activo}
-      className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 text-center text-sm transition-all duration-200 ${
-        activo
-          ? 'border-gold bg-gold/10 text-champagne shadow-gold-glow'
-          : 'border-white/10 bg-white/[0.03] text-ivory/65 hover:border-gold/40 hover:text-ivory'
-      }`}
-    >
-      {activo && <Check className="h-3.5 w-3.5 shrink-0 text-gold" aria-hidden="true" />}
-      {children}
-    </button>
   )
 }
 
