@@ -54,7 +54,7 @@ const CLASIF_STYLE = {
   nurture: 'border-amber-400/50 bg-amber-400/10 text-amber-300',
   cierre: 'border-white/20 bg-white/5 text-ivory/50',
 }
-const CLASIF_LABEL = { activo: 'Activo', nurture: 'Nurture', cierre: 'Cierre' }
+const CLASIF_LABEL = { activo: 'Activo', nurture: 'Futuro', cierre: 'Cierre' }
 
 export default function AdminPanel({ session, onLogout }) {
   const [reservas, setReservas] = useState([])
@@ -457,9 +457,6 @@ function CalificacionDetalle({ calif, listaMensual }) {
           className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${CLASIF_STYLE[calif.clasificacion] ?? ''}`}
         >
           {CLASIF_LABEL[calif.clasificacion] ?? calif.clasificacion}
-        </span>
-        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-ivory/70">
-          Puntaje {calif.puntaje_total}/11
         </span>
         {listaMensual && (
           <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 text-xs text-amber-300">

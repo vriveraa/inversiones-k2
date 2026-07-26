@@ -300,13 +300,12 @@ function Formulario({ nombre, enviando, onSubmit }) {
           <Campo label="Presupuesto máximo de inversión" error={errores.presupuesto}>
             <div className="flex gap-3">
               <input
-                type="number"
+                type="text"
                 inputMode="numeric"
-                min="0"
-                placeholder="Ej. 120000000"
+                placeholder="Ej. 120.000.000"
                 className={`input-dark flex-1 ${errores.presupuesto ? 'input-error' : ''}`}
-                value={presupuesto}
-                onChange={(e) => setPresupuesto(e.target.value)}
+                value={presupuesto ? Number(presupuesto).toLocaleString('es-CL') : ''}
+                onChange={(e) => setPresupuesto(e.target.value.replace(/\D/g, ''))}
               />
               <select
                 className="input-dark w-28"
