@@ -68,7 +68,7 @@ export function S5Plaza() {
   return (
     <AbsoluteFill>
       <Plaza drift={30 + prog(f, 0, 225) * 50} props={false}>
-        <AirWalker k={260} o={[1560, 900]} t={f} />
+        <AirWalker k={260} o={[1660, 900]} t={f} />
         <OldPress k={300} o={[1050, 905]} m={m} wobble={wob} />
         {/* líneas de movimiento: poca estabilidad */}
         <g opacity={prog(f, 50, 16)} stroke={C.orange} strokeWidth={6} strokeLinecap="round">

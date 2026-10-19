@@ -74,7 +74,7 @@ function Gym({ x, y, s, tags, f, start }) {
 export function S3Precio() {
   const f = useCurrentFrame();
   const B = 108; // cambio a la segunda parte
-  const toB = prog(f, B, 22);
+  const toB = prog(f, B - 6, 16);
   return (
     <AbsoluteFill style={{ background: C.paper }}>
       <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0 }}>
@@ -93,14 +93,13 @@ export function S3Precio() {
           <path d="M630,700 Q663,664 696,700" stroke={C.ink} strokeWidth={8} fill="none" />
         </g>
         <g opacity={toB} transform={`translate(${(1 - toB) * 240},0)`}>
-          <Gym x={560} y={860} s={1.05} tags={2} f={f} start={B + 6} />
-          <Gym x={960} y={860} s={1.05} tags={3} f={f} start={B + 16} />
-          <Gym x={1360} y={860} s={1.05} tags={4} f={f} start={B + 26} />
+          <Gym x={560} y={860} s={1.05} tags={2} f={f} start={B + 10} />
+          <Gym x={960} y={860} s={1.05} tags={3} f={f} start={B + 20} />
+          <Gym x={1360} y={860} s={1.05} tags={4} f={f} start={B + 30} />
         </g>
       </svg>
-      <Kicker label="El problema · Precio" element="Problema" exit={B} />
-      <Title start={12} exit={B} size={110} width={700}>Tu gimnasio cerró</Title>
-      <Kicker label="El problema · Precio" element="Problema" start={B + 4} />
+      <Kicker label="El problema · Precio" element="Problema" />
+      <Title start={12} exit={B - 12} size={90} width={620}>Tu gimnasio cerró</Title>
       <Title start={B + 8} size={100} width={1500}>Los que quedan cuestan bastante más</Title>
     </AbsoluteFill>
   );

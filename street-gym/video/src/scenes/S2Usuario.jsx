@@ -79,7 +79,7 @@ export function S2Usuario() {
       </svg>
       <Kicker label="El usuario" element="Usuario" />
       <Title start={12} size={96} width={860}>
-        Esta es la rutina de miles de ex usuarios de Energy
+        Esta es la rutina de miles de exusuarios de Energy
       </Title>
       <Pill x={120} y={610} start={40} dot={C.teal}>20 a 30 años</Pill>
       <Pill x={120} y={700} start={52} dot={C.teal}>Entrena hipertrofia</Pill>

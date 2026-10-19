@@ -72,7 +72,7 @@ export function S4Tiempo() {
       <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0 }}>
         <circle cx={500} cy={560} r={290} fill={C.sky} />
         <g transform={`translate(${500 - 200},${560 - 200 + (1 - prog(f, 6, 20, out)) * 30}) scale(4)`} opacity={prog(f, 6, 20, out)}>
-          <IconClock t={spin} speed={9} />
+          <IconClock t={spin} speed={5} />
         </g>
         <g opacity={prog(f, 14, 20, out)} transform={`translate(0,${(1 - prog(f, 14, 20, out)) * 30})`}>
           <MapCard f={f} />

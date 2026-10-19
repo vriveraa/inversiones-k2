@@ -21,11 +21,12 @@ export function S9Cierre() {
         <PressUser k={k} o={o} m={m} />
         <LatUser k={k} o={o} latY={latY} />
       </Plaza>
+      <div style={{ position: 'absolute', left: 72, top: 214, width: 860, height: 520, borderRadius: 32, background: 'rgba(246,248,243,0.9)', boxShadow: '0 16px 48px rgba(19,32,46,0.12)', ...enter(f, 14, { dist: 20 }) }} />
       <Title start={24} y={250} size={180} width={900}>¿La usarías?</Title>
       <div style={{ position: 'absolute', left: 120, top: 520, ...enter(f, 52) }}>
         <Lockup size={92} />
       </div>
-      <Sub start={66} y={650} size={36} weight={600} width={800}>CD1201 · Ingeniería, Universidad de Chile</Sub>
+      <Sub start={66} y={650} size={36} weight={600} width={780} color={C.ink2}>CD1201 · Ingeniería, Universidad de Chile</Sub>
     </AbsoluteFill>
   );
 }

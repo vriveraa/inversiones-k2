@@ -21,8 +21,8 @@ export function S8Ventajas() {
       <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0 }}>
         <rect y={900} width={1920} height={180} fill={C.maicillo} />
         <g opacity={0.35}>
-          <Tree x={60} y={960} s={0.9} />
-          <Tree x={1880} y={960} s={1.0} />
+          <Tree x={-60} y={960} s={0.9} />
+          <Tree x={1990} y={960} s={1.0} />
         </g>
         {ITEMS.map(([label, Icon], i) => {
           const st = 16 + i * 12;

@@ -17,7 +17,7 @@ export const SCENES = [
     id: 'usuario', n: 2, from: s(5), to: s(11), element: ['Usuario'],
     titulo: 'El usuario',
     accion: 'Un joven de unos 24 años entrena en una máquina de press de pecho en un gimnasio. Las placas suben y bajan con cada repetición.',
-    texto: 'Esta es la rutina de miles de ex usuarios de Energy · 20 a 30 años',
+    texto: 'Esta es la rutina de miles de exusuarios de Energy · 20 a 30 años · Entrena hipertrofia',
     key: 3.6,
   },
   {

@@ -18,11 +18,17 @@ cd video
 npm install
 node grabacion/generar-copia.mjs    # copia del prototipo 3D ajustada para grabar
 node grabacion/grabar.mjs           # tomas 3D fotograma a fotograma -> public/clips/*.mp4
-node scripts/fotogramas.mjs 1       # fotogramas clave de cada escena -> out/fotogramas
-node scripts/storyboard.mjs out/fotogramas ../entrega/storyboard.pdf
+npx remotion render StreetGym out/video_raw.mp4 --codec=h264 --crf=16 --gl=swiftshader
+# pasa a yuv420p estándar (rango limitado) para que se vea igual en cualquier reproductor
+ffmpeg -i out/video_raw.mp4 -vf "scale=in_range=full:out_range=tv,format=yuv420p" -c:v libx264 -preset slow -crf 18 \
+  -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -movflags +faststart -an ../entrega/video_street_gym.mp4
+node scripts/claves-desde-video.mjs out/video_raw.mp4 out/claves     # fotograma clave de cada escena
+SG_EQUIPO="Nombre 1, Nombre 2" node scripts/storyboard.mjs out/claves ../entrega/storyboard.pdf
 node scripts/srt.mjs                # ../entrega/subtitulos.srt
-npx remotion render StreetGym ../entrega/video_street_gym.mp4
+./scripts/revision.sh ../entrega/video_street_gym.mp4 5              # hojas de contacto para revisar el video
 ```
+
+- `node scripts/fotogramas.mjs 0.5` renderiza fotogramas sueltos en baja resolución sin generar el video completo.
 
 - `src/timeline.mjs` es la fuente única de las escenas, los tiempos, los subtítulos y los textos del storyboard.
 - `estacion-street-gym.html` es el prototipo original. No se modifica: la grabación usa una copia generada (`video/grabacion/estacion-grabacion.html`) que sube 0,2 m las cámaras de los ejercicios y agrega la toma de dos personas. three.js r128 se carga desde npm solo al grabar.

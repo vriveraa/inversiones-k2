@@ -81,7 +81,7 @@ export function Station({ k, o, parts = {}, press = null, lat = null, led = 0, s
           {ln([-0.48, 2.57], [0.48, 2.57], 0.008, '#5571A6')}
           {ln([-0.5, 2.5], [0.5, 2.5], 0.02, frame)}
         </g>
-      ), 1.2)}
+      ), 0.35)}
 
       {part('right', (
         <g>

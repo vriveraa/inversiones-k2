@@ -20,10 +20,10 @@ export function S6Revelacion() {
     <AbsoluteFill>
       <Plaza drift={80 + prog(f, 0, 225) * 30} props={false}>
         <g opacity={1 - gone} transform={`translate(0,${gone * 80})`}>
-          <AirWalker k={260} o={[1560, 900]} t={f + 210} />
+          <AirWalker k={260} o={[1660, 900]} t={f + 210} />
           <OldPress k={300} o={[1050, 905]} m={0.5} />
         </g>
-        <Station k={205} o={[1080, 910]} parts={parts} led={prog(f, 104, 20)} />
+        <Station k={190} o={[1068, 925]} parts={parts} led={prog(f, 104, 20)} />
       </Plaza>
       <AbsoluteFill style={{ opacity: to3d }}>
         <Sequence from={130} layout="none">

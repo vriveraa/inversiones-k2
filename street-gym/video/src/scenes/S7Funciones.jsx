@@ -16,10 +16,10 @@ function Shot({ shot, index, total }) {
       </AbsoluteFill>
       <div
         style={{
-          position: 'absolute', left: 96, top: 92, display: 'flex', flexDirection: 'column', gap: 6,
-          background: 'rgba(255,255,255,0.94)', borderRadius: 22, padding: '22px 34px 26px 30px',
-          borderLeft: `12px solid ${C.orange}`, boxShadow: '0 12px 36px rgba(19,32,46,0.16)', maxWidth: 1000,
-          ...enter(f, 6, { dist: 22, exit: shot.len - 4, exitDur: 10 }),
+          position: 'absolute', left: 96, top: 0, display: 'flex', flexDirection: 'column', gap: 6,
+          background: '#FFFFFF', borderRadius: '0 0 24px 24px', padding: '64px 38px 28px 34px',
+          borderTop: `12px solid ${C.orange}`, boxShadow: '0 12px 36px rgba(19,32,46,0.16)', maxWidth: 1000,
+          ...enter(f, index === 0 ? 16 : 6, { dist: 22, exit: shot.len - 4, exitDur: 10 }),
         }}
       >
         <span style={{ fontFamily: FONT_BODY, fontWeight: 700, fontSize: 34, color: C.teal }}>
@@ -45,9 +45,9 @@ export function S7Funciones({ scene }) {
       ))}
       <div
         style={{
-          position: 'absolute', right: 96, top: 100, padding: '10px 22px', borderRadius: 999,
+          position: 'absolute', right: 96, top: 0, padding: '40px 26px 14px', borderRadius: '0 0 18px 18px',
           background: C.ink, color: '#fff', fontFamily: FONT_BODY, fontWeight: 700, fontSize: 30,
-          ...enter(f, 10, { dist: 14 }),
+          ...enter(f, 16, { dist: 14 }),
         }}
       >
         Prototipo 3D
