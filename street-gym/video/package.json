@@ -1,0 +1,21 @@
+{
+  "name": "street-gym-video",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render StreetGym ../entrega/video_street_gym.mp4"
+  },
+  "dependencies": {
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@remotion/cli": "^4.0.536",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.536",
+    "three": "^0.128.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  }
+}
